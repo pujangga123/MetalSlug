@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://gknnmyhppo5t"]
+
+[ext_resource type="PackedScene" uid="uid://dbconbku6whi5" path="res://marco.tscn" id="1_8r5re"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k8q33"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gsvey"]
+size = Vector2(588, 20)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Marco" parent="." instance=ExtResource("1_8r5re")]
+position = Vector2(23, 79)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_k8q33")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(294, 166)
+shape = SubResource("RectangleShape2D_gsvey")

@@ -1,0 +1,230 @@
+[gd_scene load_steps=25 format=3 uid="uid://dbconbku6whi5"]
+
+[ext_resource type="Texture2D" uid="uid://cw257j47nfc4h" path="res://Assets/Marco/idle-0.png" id="1_srdh6"]
+[ext_resource type="Texture2D" uid="uid://cvbkuv664rtc" path="res://Assets/Marco/idle-1.png" id="2_wdo1c"]
+[ext_resource type="Texture2D" uid="uid://da7yj3qdyo5xp" path="res://Assets/Marco/idle-2.png" id="3_t31qg"]
+[ext_resource type="Texture2D" uid="uid://m43ytxuvvipa" path="res://Assets/Marco/idle-3.png" id="4_bg6nt"]
+[ext_resource type="Texture2D" uid="uid://h7k35qb8dita" path="res://Assets/Marco/idle-4.png" id="5_1fm2v"]
+[ext_resource type="Texture2D" uid="uid://b7qmfrr6h6vde" path="res://Assets/Marco/idle-5.png" id="6_y4f23"]
+[ext_resource type="Texture2D" uid="uid://dbsibj1bk105b" path="res://Assets/Marco/run-0.png" id="7_nm8dk"]
+[ext_resource type="Texture2D" uid="uid://cjhfl36iqdcp" path="res://Assets/Marco/run-1.png" id="8_ripb5"]
+[ext_resource type="Texture2D" uid="uid://dubttq5n7aobr" path="res://Assets/Marco/run-2.png" id="9_r6si7"]
+[ext_resource type="Texture2D" uid="uid://balsusggufax8" path="res://Assets/Marco/run-3.png" id="10_c48o8"]
+[ext_resource type="Texture2D" uid="uid://4upsak6aoca3" path="res://Assets/Marco/run-4.png" id="11_7uw1r"]
+[ext_resource type="Texture2D" uid="uid://dtvd0s0qrfgil" path="res://Assets/Marco/run-5.png" id="12_iupgk"]
+[ext_resource type="Texture2D" uid="uid://dhqmn5b61y7qp" path="res://Assets/Marco/run-6.png" id="13_b8x62"]
+[ext_resource type="Texture2D" uid="uid://c6yvqiumyse5d" path="res://Assets/Marco/run-7.png" id="14_lfc5m"]
+[ext_resource type="Texture2D" uid="uid://7a5eklpgqgey" path="res://Assets/Marco/run-8.png" id="15_rxgfc"]
+[ext_resource type="Texture2D" uid="uid://b7yhrqxoqgwoy" path="res://Assets/Marco/run-9.png" id="16_g1fjh"]
+[ext_resource type="Texture2D" uid="uid://xklekxosrwm5" path="res://Assets/Marco/run-10.png" id="17_vq2lq"]
+[ext_resource type="Texture2D" uid="uid://c7tow6h0fpqkq" path="res://Assets/Marco/run-11.png" id="18_8wsva"]
+
+[sub_resource type="GDScript" id="GDScript_vhjjo"]
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 100
+const JUMP_VELOCITY = -300.0
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
+
+
+func _physics_process(delta):
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y += gravity * delta
+
+	# Handle Jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction = Input.get_axis(\"ui_left\", \"ui_right\")
+	if direction == -1:
+		$AnimatedSprite2D.flip_h = true
+	if direction == 1:
+		$AnimatedSprite2D.flip_h = false
+	
+	if direction:
+		velocity.x = direction * SPEED
+		$AnimatedSprite2D.play(\"Run\")
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		$AnimatedSprite2D.play(\"Idle\")
+
+	move_and_slide()
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_56p1g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_srdh6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_wdo1c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_t31qg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bg6nt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1fm2v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_y4f23")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_nm8dk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ripb5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_r6si7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_c48o8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_7uw1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_iupgk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_b8x62")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lfc5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_rxgfc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_g1fjh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_vq2lq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_8wsva")
+}],
+"loop": true,
+"name": &"Run",
+"speed": 11.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bvmyc"]
+size = Vector2(25, 40)
+
+[sub_resource type="Animation" id="Animation_7wddv"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Run"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(21, -21), Vector2(21, -21), Vector2(21, -25), Vector2(23, -21), Vector2(24, -21), Vector2(24, -21), Vector2(24, -23), Vector2(24, -21)]
+}
+
+[sub_resource type="Animation" id="Animation_3briy"]
+resource_name = "Run"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Run"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(21, -21), Vector2(21, -21), Vector2(21, -23), Vector2(21, -21), Vector2(23, -21), Vector2(24, -23), Vector2(23, -21)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j5uqk"]
+_data = {
+"RESET": SubResource("Animation_7wddv"),
+"Run": SubResource("Animation_3briy")
+}
+
+[node name="Marco" type="CharacterBody2D"]
+script = SubResource("GDScript_vhjjo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(21, -21)
+sprite_frames = SubResource("SpriteFrames_56p1g")
+animation = &"Run"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(14.5, -20)
+shape = SubResource("RectangleShape2D_bvmyc")
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_j5uqk")
+}
